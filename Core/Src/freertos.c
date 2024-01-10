@@ -124,9 +124,8 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-
 	  HAL_TIM_Base_Start_IT(&htim3);
-	  osDelay(100);
+	  osDelay(200);
   }
   /* USER CODE END StartDefaultTask */
 }
