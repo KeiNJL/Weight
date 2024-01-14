@@ -61,6 +61,7 @@ void Error_Handler(void);
 #define SCK_GPIO_Port GPIOB
 #define DOUT_Pin GPIO_PIN_14
 #define DOUT_GPIO_Port GPIOB
+#define DOUT_EXTI_IRQn EXTI15_10_IRQn
 #define LED2_Pin GPIO_PIN_15
 #define LED2_GPIO_Port GPIOA
 #define LED_Pin GPIO_PIN_3
