@@ -16,23 +16,34 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		{
 			HAL_TIM_Base_Stop_IT(&htim3);
 			read_data = data;
-			data = 0;
-			counter = 0;
+			HAL_NVIC_EnableIRQ(EXTI_LINE_14);
 		}
-		if (counter%2 == 1)
+		else
 		{
-			HAL_GPIO_TogglePin(SCK_GPIO_Port, SCK_Pin);
-		}
-		if (counter%2 == 0)
-		{
-			if (HAL_GPIO_ReadPin(DOUT_GPIO_Port, DOUT_Pin) == GPIO_PIN_SET)
+			if (counter%2 == 1)
 			{
-				data = 1 | data;
+				HAL_GPIO_TogglePin(SCK_GPIO_Port, SCK_Pin);
 			}
-			data = data << 1;
-			HAL_GPIO_TogglePin(SCK_GPIO_Port, SCK_Pin);
+			if ((counter%2 == 0) && (counter != 0))
+			{
+				if (HAL_GPIO_ReadPin(DOUT_GPIO_Port, DOUT_Pin) == GPIO_PIN_SET)
+				{
+					data = 1 | data;
+				}
+				data = data << 1;
+				HAL_GPIO_TogglePin(SCK_GPIO_Port, SCK_Pin);
+			}
 		}
 	}
 }
 
-
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+   if(GPIO_Pin == DOUT_Pin)
+   {
+	   data = 0;
+	   counter = 0;
+	   HAL_NVIC_DisableIRQ(EXTI_LINE_14);
+	   HAL_TIM_Base_Start_IT(&htim3);
+   }
+}
